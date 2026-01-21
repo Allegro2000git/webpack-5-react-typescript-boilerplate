@@ -13,7 +13,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
 module.exports = {
 
   // Where webpack looks to start building the bundle and include polyfill
-  entry: ['whatwg-fetch', paths.src + '/index.js'],
+  entry: ['whatwg-fetch', paths.src + '/index.tsx'],
 
   // Where webpack outputs the assets and bundles
   output: {
@@ -63,7 +63,6 @@ module.exports = {
     // Generates deprecation warning: https://github.com/jantimon/html-webpack-plugin/issues/1501
     new HtmlWebpackPlugin({
       title: 'webpack Boilerplate',
-      favicon: paths.src + '/images/favicon.png',
       template: paths.src + '/template.html', // template file
       filename: 'index.html', // output file
     }),
@@ -96,12 +95,10 @@ module.exports = {
 
       // Styles: Inject CSS into the head with source maps
       {
-        test: /\.(scss|css)$/,
+        test: /\.css$/,
         use: [
           'style-loader',
           { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-          { loader: 'postcss-loader', options: { sourceMap: true } },
-          { loader: 'sass-loader', options: { sourceMap: true } },
         ],
       },
 
