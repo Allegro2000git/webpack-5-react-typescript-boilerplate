@@ -23,7 +23,6 @@ export const Login = () => {
     }
 
     return (
-        <LoginContainer>
             <FormCard>
                 <Form
                     name="basic"
@@ -74,12 +73,8 @@ export const Login = () => {
                     </Spin>
                 </Form>
             </FormCard>
-        </LoginContainer>
     );
 };
-
-const LoginContainer = styled.div`
-`;
 
 const FormCard = styled.div`
     width: 400px;
