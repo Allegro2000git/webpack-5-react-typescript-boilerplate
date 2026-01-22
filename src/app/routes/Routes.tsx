@@ -1,8 +1,9 @@
 import {Route, Routes} from "react-router-dom";
-import {Auth} from "../../features/auth/ui/Auth";
 import React from "react";
-import {PageNotFound} from "../../features/notFound/PageNotFound";
-import {UserList} from "../../features/users/UserList";
+import {NotFoundPage} from "../../pages/notFoundPage/NotFoundPage";
+import {LoginPage} from "../../pages/loginPage/LoginPage";
+import {ProtectedRoute} from "../../shared/components/ProtectedRoute";
+import {UsersPage} from "../../pages/users/UsersPage";
 
 export const Path = {
     login: "/",
@@ -12,8 +13,15 @@ export const Path = {
 
 export const Routing = () => (
         <Routes>
-            <Route path={Path.login} element={<Auth />} />
-            <Route path={Path.users} element={<UserList />} />
-            <Route path={Path.notFound} element={<PageNotFound />} />
+            <Route path={Path.login} element={<LoginPage />} />
+            <Route
+                path={Path.users}
+                element={
+                    <ProtectedRoute>
+                        <UsersPage />
+                    </ProtectedRoute>
+                }
+            />
+            <Route path={Path.notFound} element={<NotFoundPage />} />
     </Routes>
 )
