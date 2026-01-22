@@ -1,6 +1,6 @@
 import React from "react";
 
-export const UserList = () => {
+export const UsersPage = () => {
     return (
         <div>
             users

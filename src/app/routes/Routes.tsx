@@ -1,9 +1,9 @@
 import {Route, Routes} from "react-router-dom";
 import React from "react";
-import {NotFoundPage} from "../../pages/notFoundPage/NotFoundPage";
 import {LoginPage} from "../../pages/loginPage/LoginPage";
 import {ProtectedRoute} from "../../shared/components/ProtectedRoute";
-import {UsersPage} from "../../pages/users/UsersPage";
+import {NotFoundPage} from "../../features/notFound/NotFoundPage";
+import {UsersPage} from "../../features/users/UsersPage";
 
 export const Path = {
     login: "/",
