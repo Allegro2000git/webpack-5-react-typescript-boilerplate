@@ -1,25 +1,15 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {Alert, Button, Form, type FormItemProps, Input, Spin} from 'antd';
 import type {LoginInputType} from "../../../shared/types/types";
 import {useLoginMutation} from "../model/useLoginMutation";
-import { useNavigate } from 'react-router-dom';
-import {Path} from "../../../app/routes/Routes";
 import styled from "styled-components";
 
 
 export const Login = () => {
-    const navigate = useNavigate();
-
-    const { mutate: login, isPending, isError, error, isSuccess} = useLoginMutation();
-
-    useEffect(() => {
-        if (isSuccess) {
-            navigate(Path.users, { replace: true });
-        }
-    }, [isSuccess, navigate]);
+    const { mutate: login, isPending, isError, error} = useLoginMutation();
 
     const onFinish = (inputs: LoginInputType) => {
-        login(inputs);
+        login(inputs)
     }
 
     return (
@@ -36,16 +26,9 @@ export const Login = () => {
                             description={error.message}
                             type="error"
                             showIcon
+                            style={{marginBottom: "5px"}}
                         />
                     )}
-
-                    {isSuccess && (
-                        <Alert
-                            message="Успешно"
-                            type="success"
-                            showIcon
-                        />
-                     )}
 
                     <Spin spinning={isPending} tip="Выполняется вход..." size="large">
                     <FormItemSpacing

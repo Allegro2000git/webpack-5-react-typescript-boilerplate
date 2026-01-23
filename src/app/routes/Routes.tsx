@@ -3,7 +3,7 @@ import React from "react";
 import {LoginPage} from "../../pages/loginPage/LoginPage";
 import {ProtectedRoute} from "../../shared/components/ProtectedRoute";
 import {NotFoundPage} from "../../pages/notFoundPage/NotFoundPage";
-import {UsersPage} from "../../features/users/UsersPage";
+import {UsersPage} from "../../pages/usersPage/UsersPage";
 
 export const Path = {
     login: "/",
