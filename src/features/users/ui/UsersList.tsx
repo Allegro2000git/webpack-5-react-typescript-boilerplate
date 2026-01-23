@@ -1,14 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
 import styled from "styled-components";
 import {Avatar, Button, List} from "antd";
 import {useGetUsers} from "../model/getUsersQuery";
 import {useLogoutMutation} from "../../auth/model/useLogoutMutation";
 import {useDateFormat} from "../../../shared/hooks/useDateFormat";
+import {CreateUserModal} from "../../../shared/components/CreateUserModal";
+import {useCreateUserMutation} from "../model/createUserMutation";
+import type {CreateUserInput} from "../../../shared/types/types";
 
 export const UsersList = () => {
     const {data} = useGetUsers()
     const logout = useLogoutMutation()
     const { format } = useDateFormat();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const createUser = useCreateUserMutation();
+
+    const handleCreateUser = async (userData: { name: string; avatar?: string }) => {
+        const createUserData: CreateUserInput = {
+            name: userData.name,
+            avatar: userData.avatar || '',
+            };
+            await createUser.mutateAsync(createUserData);
+            setIsModalOpen(false);
+    }
 
     const handleLogout = () => {
         logout.mutate();
@@ -34,10 +48,16 @@ export const UsersList = () => {
                             </List.Item>
                         )}
                     />
-                    <Button type="primary">Создать пользователя</Button>
+                    <Button type="primary" onClick={() => setIsModalOpen(true)}>Создать пользователя</Button>
                 </ListContainer>
                 <Button type="primary" onClick={handleLogout}>Выход</Button>
             </Content>
+
+            <CreateUserModal
+                open={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onSubmit={handleCreateUser}
+            />
         </Container>
     );
 };
