@@ -6,7 +6,7 @@ import {NotFoundPage} from "../../pages/notFoundPage/NotFoundPage";
 import {UsersPage} from "../../pages/usersPage/UsersPage";
 
 export const Path = {
-    login: "/login",
+    login: "/",
     users: "/users",
     notFound: "*",
 } as const
