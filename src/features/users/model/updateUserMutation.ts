@@ -1,13 +1,13 @@
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {baseApi} from "../../../app/api/base";
-import type {UserInput, User} from "../../../shared/types/types";
+import type {User} from "../../../shared/types/types";
 
-export const useCreateUserMutation = () => {
+export const useUpdateUserMutation = () => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (data: UserInput) => {
-            const res = await baseApi.post<User>('/users', data)
+        mutationFn: async ({ id, ...data }: Omit<User, 'createdAt'>) => {
+            const res = await baseApi.put<User>(`/users/${id}`, data)
             return res.data
         },
         onSuccess: () => {

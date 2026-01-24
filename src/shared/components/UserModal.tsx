@@ -1,23 +1,44 @@
 import {Button, Form, Input, Modal} from "antd";
 import {LinkOutlined} from "@ant-design/icons";
 import styled from "styled-components";
-import React from "react";
-import type {CreateUserInput} from "../types/types";
+import React, {useEffect, useState} from "react";
+import type {UserInput} from "../types/types";
+import {DEFAULT_AVATAR} from "../constants/constants";
 
-export const CreateUserModal = ({open, onClose, onSubmit}: { open: boolean; onClose: () => void; onSubmit: (values: CreateUserInput) => Promise<void>}) => {
+export const UserModal = ({open, onClose, onSubmit, initialValues , title, submitButtonText}: {
+    open: boolean; onClose: () => void; onSubmit: (values: UserInput) => Promise<void>,
+    initialValues?: UserInput, title: string, submitButtonText: string }) => {
+
     const [form] = Form.useForm();
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    useEffect(() => {
+        if (open) {
+            if (initialValues) {
+                const avatar = initialValues.avatar || DEFAULT_AVATAR;
+                form.setFieldsValue({
+                    name: initialValues.name || "anonymous",
+                    avatar
+                });
+            } else {
+                form.resetFields();
+            }
+        }
+    }, [open, initialValues, form]);
 
     const handleSubmit = async () => {
-        try {
-            const values = await form.validateFields();
-            await onSubmit(values);
-            form.resetFields();
-        } catch (error) {
-            console.error('Ошибка при создании пользователя:', error);
-        }
+            try {
+                setIsSubmitting(true);
+                const values = await form.validateFields();
+                await onSubmit(values);
+                form.resetFields();
+            } finally {
+                setIsSubmitting(false);
+            }
     };
 
     const handleClose = () => {
+        if (isSubmitting) return;
         form.resetFields();
         onClose();
     };
@@ -25,10 +46,11 @@ export const CreateUserModal = ({open, onClose, onSubmit}: { open: boolean; onCl
 
     return (
         <Modal
-            title="Создание пользователя"
+            title={title}
             open={open}
             onCancel={handleClose}
             footer={null}
+            closable={!isSubmitting}
             width={500}
             destroyOnClose
         >
@@ -52,7 +74,7 @@ export const CreateUserModal = ({open, onClose, onSubmit}: { open: boolean; onCl
                         }
                     ]}
                 >
-                    <Input/>
+                    <Input disabled={isSubmitting}/>
                 </Form.Item>
 
                 <Form.Item
@@ -68,6 +90,7 @@ export const CreateUserModal = ({open, onClose, onSubmit}: { open: boolean; onCl
                     <Input
                         prefix={<LinkOutlined />}
                         allowClear
+                        disabled={isSubmitting}
                     />
                 </Form.Item>
 
@@ -75,10 +98,11 @@ export const CreateUserModal = ({open, onClose, onSubmit}: { open: boolean; onCl
                     <Button
                         type="primary"
                         htmlType="submit"
+                        disabled={isSubmitting}
                     >
-                        Создать
+                        {submitButtonText}
                     </Button>
-                    <Button onClick={handleClose}>
+                    <Button onClick={handleClose} disabled={isSubmitting}>
                         Отмена
                     </Button>
                 </FooterContainer>

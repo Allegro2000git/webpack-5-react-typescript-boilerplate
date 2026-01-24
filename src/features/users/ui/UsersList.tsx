@@ -1,28 +1,18 @@
-import React, {useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import {Avatar, Button, List} from "antd";
 import {useGetUsers} from "../model/getUsersQuery";
 import {useLogoutMutation} from "../../auth/model/useLogoutMutation";
 import {useDateFormat} from "../../../shared/hooks/useDateFormat";
-import {CreateUserModal} from "../../../shared/components/CreateUserModal";
-import {useCreateUserMutation} from "../model/createUserMutation";
-import type {CreateUserInput} from "../../../shared/types/types";
+import {UserModal} from "../../../shared/components/UserModal";
+import {useUserModal} from "../../../shared/hooks/useUserModal";
+import {DEFAULT_AVATAR} from "../../../shared/constants/constants";
 
 export const UsersList = () => {
     const {data} = useGetUsers()
     const logout = useLogoutMutation()
     const { format } = useDateFormat();
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const createUser = useCreateUserMutation();
-
-    const handleCreateUser = async (userData: { name: string; avatar?: string }) => {
-        const createUserData: CreateUserInput = {
-            name: userData.name,
-            avatar: userData.avatar || '',
-            };
-            await createUser.mutateAsync(createUserData);
-            setIsModalOpen(false);
-    }
+    const userModal = useUserModal();
 
     const handleLogout = () => {
         logout.mutate();
@@ -38,8 +28,8 @@ export const UsersList = () => {
                         renderItem={(user) => (
                             <List.Item key={user.id}>
                                 <List.Item.Meta
-                                    avatar={<Avatar src={user.avatar} />}
-                                    title={<a href="">{user.name}</a>}
+                                    avatar={<Avatar onClick={() => userModal.handleEditClick(user)} src={user.avatar || DEFAULT_AVATAR} style={{cursor: "pointer"}}/>}
+                                    title={<span onClick={() => userModal.handleEditClick(user)} style={{cursor: "pointer"}}>{user.name}</span>}
                                     description={
                                     <Description>
                                         Зарегистрирован {format(user.createdAt)}
@@ -48,16 +38,12 @@ export const UsersList = () => {
                             </List.Item>
                         )}
                     />
-                    <Button type="primary" onClick={() => setIsModalOpen(true)}>Создать пользователя</Button>
+                    <Button type="primary" onClick={userModal.handleCreateClick}>Создать пользователя</Button>
                 </ListContainer>
                 <Button type="primary" onClick={handleLogout}>Выход</Button>
             </Content>
 
-            <CreateUserModal
-                open={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onSubmit={handleCreateUser}
-            />
+            <UserModal {...userModal.getModalProps()}/>
         </Container>
     );
 };

@@ -9,4 +9,4 @@ export type User = {
     name: string
     avatar: string
 }
-export type CreateUserInput = Omit<User, 'id' | 'createdAt'>;
+export type UserInput = Omit<User, 'id' | 'createdAt'>;
