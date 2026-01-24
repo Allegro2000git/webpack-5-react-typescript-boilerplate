@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import {Avatar, Button, List} from "antd";
 import {useGetUsers} from "../model/getUsersQuery";
@@ -13,6 +13,7 @@ export const UsersList = () => {
     const logout = useLogoutMutation()
     const { format } = useDateFormat();
     const userModal = useUserModal();
+
 
     const handleLogout = () => {
         logout.mutate();

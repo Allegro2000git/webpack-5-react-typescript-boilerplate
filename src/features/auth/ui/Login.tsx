@@ -1,12 +1,23 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Alert, Button, Form, type FormItemProps, Input, Spin} from 'antd';
 import type {LoginInputType} from "../../../shared/types/types";
 import {useLoginMutation} from "../model/useLoginMutation";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
+import {Path} from "../../../app/routes/Routes";
 
 
 export const Login = () => {
     const { mutate: login, isPending, isError, error} = useLoginMutation();
+    const navigate = useNavigate();
+    const token = localStorage.getItem('auth_token');
+
+    useEffect(() => {
+        if (token) {
+            navigate(Path.users, { replace: true });
+        }
+    }, [token, navigate]);
+
 
     const onFinish = (inputs: LoginInputType) => {
         login(inputs)

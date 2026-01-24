@@ -1,5 +1,5 @@
 import React, {type ReactNode} from "react";
-import { Navigate } from 'react-router-dom';
+import {Navigate} from 'react-router-dom';
 import {Path} from "../../app/routes/Routes";
 
 export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
