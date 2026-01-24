@@ -7,7 +7,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
 
 module.exports = merge(common, {
   mode: 'production',
-  devtool: 'eval-cheap-module-source-map',
+  devtool: 'source-map',
 
   output: {
     path: paths.build,
@@ -32,7 +32,7 @@ module.exports = merge(common, {
       {
         test: /\.css$/,
         use: [
-            "style-loader",
+            MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
             options: {
